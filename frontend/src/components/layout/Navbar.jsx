@@ -1,5 +1,8 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSelector } from "react-redux";
+import LogOut from "../LogOut";
+import LogIn from "../LogIn";
 const Navbar = () => {
+  const { isConnected } = useSelector((state) => state.user);
   return (
     <>
       <nav className="main-nav">
@@ -11,11 +14,7 @@ const Navbar = () => {
           />
           <h1 className="sr-only">Argent Bank</h1>
         </a>
-        <div>
-          <a className="main-nav-item" href="./login">
-            <FontAwesomeIcon icon="user-circle" /> Sign In
-          </a>
-        </div>
+        {isConnected ? <LogOut /> : <LogIn />}
       </nav>
     </>
   );

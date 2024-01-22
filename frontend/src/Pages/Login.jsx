@@ -1,6 +1,18 @@
-import { loginUser } from "../services/requests";
-
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserLogin } from "../redux/slices/userSlice";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 const Login = () => {
+  const dispatchEvent = useDispatch();
+  const navigate = useNavigate();
+  const { isConnecting, isConnected } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (isConnected) {
+      navigate("/profile");
+    }
+  }, [isConnected]);
+  console.log(isConnecting, isConnected);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const username = document.getElementById("username").value;
@@ -11,8 +23,7 @@ const Login = () => {
       password,
       rememberMe,
     };
-    const response = await loginUser(user);
-    console.log(response);
+    dispatchEvent(fetchUserLogin(user));
   };
   return (
     <>
@@ -34,6 +45,7 @@ const Login = () => {
               <label htmlFor="remember-me">Remember me</label>
             </div>
             <button className="sign-in-button">Sign In</button>
+            {isConnecting && <p>Connexion en cours...</p>}
           </form>
         </section>
       </main>
