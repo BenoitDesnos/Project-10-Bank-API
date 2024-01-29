@@ -186,6 +186,10 @@ body {
   font-size: 5rem;
 }
 
+.signout--container {
+  display: flex;
+  cursor: pointer;
+}
 .input-remember {
   display: flex;
 }

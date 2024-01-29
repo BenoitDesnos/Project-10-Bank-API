@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserLogin } from "../redux/slices/userSlice";
+import { fetchLogin } from "../redux/slices/userSlice";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 const Login = () => {
@@ -23,7 +23,7 @@ const Login = () => {
       password,
       rememberMe,
     };
-    dispatchEvent(fetchUserLogin(user));
+    dispatchEvent(fetchLogin(user));
   };
   return (
     <>

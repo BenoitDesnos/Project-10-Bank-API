@@ -1,12 +1,19 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getToken, saveToken } from "../../utils/tokenStorage";
+import { loginUser, userProfile } from "../../services/requests";
 
-import { loginUser } from "../../services/requests";
-
-export const fetchUserLogin = createAsyncThunk(
-  "userManagementAPI/fetchUser",
+export const fetchLogin = createAsyncThunk(
+  "userAPI/fetchLogin",
   async (params) => {
     const data = await loginUser(params);
+    return data;
+  }
+);
+
+export const fetchProfile = createAsyncThunk(
+  "userAPI/fetchProfile",
+  async () => {
+    const data = await userProfile();
     return data;
   }
 );
@@ -20,7 +27,7 @@ const initialState = {
 };
 
 const userSlice = createSlice({
-  name: "userManagement",
+  name: "user",
   initialState,
   reducers: {
     setCurrentUser: (state, action) => {
@@ -31,18 +38,30 @@ const userSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(fetchUserLogin.pending, (state) => {
+    // login cases --------------------------------------------------------------
+    builder.addCase(fetchLogin.pending, (state) => {
       state.isConnecting = true;
     });
-    builder.addCase(fetchUserLogin.fulfilled, (state, action) => {
+    builder.addCase(fetchLogin.fulfilled, (state, action) => {
       if (action.payload.status === 200) {
         state.isConnecting = false;
         saveToken(action.payload.body.token);
         state.isConnected = true;
       }
     });
-    builder.addCase(fetchUserLogin.rejected, (state) => {
+    builder.addCase(fetchLogin.rejected, (state) => {
       state.isConnecting = false;
+    });
+    // Profile cases --------------------------------------------------------------
+    builder.addCase(fetchProfile.pending, (state) => {
+      state.isFetchingProfile = true;
+    });
+    builder.addCase(fetchProfile.fulfilled, (state, action) => {
+      state.isFetchingProfile = false;
+      state.userProfile = action.payload.body;
+    });
+    builder.addCase(fetchProfile.rejected, (state) => {
+      state.isFetchingProfile = false;
     });
   },
 });
