@@ -1,15 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProfile } from "../redux/slices/userSlice";
 import { useNavigate } from "react-router";
+import EditProfileForm from "../components/EditProfileForm";
 
 const Profile = () => {
   const dispatchEvent = useDispatch();
   const navigate = useNavigate();
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const { isConnected, userProfile } = useSelector((state) => state.user);
   useEffect(() => {
-    console.log(isConnected);
     if (isConnected) {
       dispatchEvent(fetchProfile());
     } else {
@@ -23,9 +24,23 @@ const Profile = () => {
           <h1>
             Welcome back
             <br />
-            {userProfile?.firstName + " " + userProfile?.lastName}
           </h1>
-          <button className="edit-button">Edit Name</button>
+          {isEditOpen ? (
+            <EditProfileForm
+              setIsEditOpen={setIsEditOpen}
+              userProfile={userProfile}
+            />
+          ) : (
+            <>
+              <h1>{userProfile?.firstName + " " + userProfile?.lastName}</h1>
+              <button
+                className="edit-button"
+                onClick={() => setIsEditOpen(true)}
+              >
+                Edit Name
+              </button>
+            </>
+          )}
         </div>
         <h2 className="sr-only">Accounts</h2>
         <section className="account">

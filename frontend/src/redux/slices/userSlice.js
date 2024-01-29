@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getToken, saveToken } from "../../utils/tokenStorage";
-import { loginUser, userProfile } from "../../services/requests";
+import {
+  loginUser,
+  userModifyName,
+  userProfile,
+} from "../../services/requests";
 
 export const fetchLogin = createAsyncThunk(
   "userAPI/fetchLogin",
@@ -14,6 +18,14 @@ export const fetchProfile = createAsyncThunk(
   "userAPI/fetchProfile",
   async () => {
     const data = await userProfile();
+    return data;
+  }
+);
+
+export const fetchModifyName = createAsyncThunk(
+  "userAPI/fetchModifyName",
+  async (params) => {
+    const data = await userModifyName(params);
     return data;
   }
 );
@@ -62,6 +74,17 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchProfile.rejected, (state) => {
       state.isFetchingProfile = false;
+    });
+    // modify name cases --------------------------------------------------------------
+    builder.addCase(fetchModifyName.pending, (state) => {
+      state.isModifyProfile = true;
+    });
+    builder.addCase(fetchModifyName.fulfilled, (state, action) => {
+      state.isModifyProfile = false;
+      state.userProfile = action.payload.body;
+    });
+    builder.addCase(fetchModifyName.rejected, (state) => {
+      state.isModifyProfile = false;
     });
   },
 });

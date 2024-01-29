@@ -45,3 +45,21 @@ export const userProfile = async () => {
     throw error;
   }
 };
+
+export const userModifyName = async (params) => {
+  try {
+    const response = await fetch(`${userUrl}/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify(params),
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error during modify name:", error.message);
+    throw error;
+  }
+};

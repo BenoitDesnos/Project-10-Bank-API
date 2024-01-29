@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { setIsConnected } from "../redux/slices/userSlice";
+import { NavLink } from "react-router-dom";
 /* import {  useSelector } from "react-redux"; */
 function LogOut() {
   /* const { userProfile } = useSelector(state => state.user); */
@@ -15,9 +16,9 @@ function LogOut() {
   };
   return (
     <div className="signout--container">
-      <a className="main-nav-item" href="/profile">
+      <NavLink className="main-nav-item" to="/profile">
         <FontAwesomeIcon icon="user-circle" /> {"Benoit"}
-      </a>
+      </NavLink>
       <div className="main-nav-item" onClick={handleLogOut}>
         <FontAwesomeIcon icon="sign-out" /> Sign Out
       </div>
