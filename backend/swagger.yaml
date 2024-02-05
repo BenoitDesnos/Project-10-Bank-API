@@ -112,7 +112,7 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
-  /:accountId/transactions:
+  /account/:id/transactions:
     get:
       security:
         - Bearer: []
@@ -150,7 +150,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /:accountId/transactions/:id:
+  /account/:id/transactions/:id:
     get:
       security:
         - Bearer: []
@@ -175,6 +175,37 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /account/:id/transactions/:id/details:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      description: Create a new transaction with a specific ID
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Transaction details for creating a new transaction with a specific ID
+          required: true
+          schema:
+            $ref: '#/definitions/Details'
+      produces:
+        - application/json
+      responses:
+        '201':
+          description: Transaction created successfully
+          schema:
+            $ref: '#/definitions/Details'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error      
     put:
       security:
         - Bearer: []
@@ -193,25 +224,42 @@ paths:
           description: Update transaction attributes
           required: true
           schema:
-            type: object
-            properties: 
-              category:
-                type: string
-                description: The category of the transaction
-              note:
-                type: string
-                description: The note of the transaction  
+            $ref: '#/definitions/Details'
       produces:
         - application/json
       responses:
         '200':
           description: Transaction details retrieved successully
           schema:
-            $ref: '#/definitions/Transaction'
+            $ref: '#/definitions/Details'
         '400':
           description: Invalid Fields
         '500':
           description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      description: Delete transaction details
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+       
+      produces:
+        - application/json
+      responses:
+        '204':
+          description: Transaction details deleted successfully
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+          
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -266,6 +314,15 @@ definitions:
         type: string
       lastName:
         type: string
+  Details:
+    type: object
+    properties:
+      category: 
+        type: string 
+      notes:
+        type: string 
+      updated_at:
+        type: string
   Transaction:
     type: object
     properties:
@@ -277,11 +334,8 @@ definitions:
         type: number
       balance:
         type: number
-      category: 
-        type: string 
-      notes:
-        type: string 
+      schema:
+        $ref: '#/definitions/Details'
       created_at:
         type: string
-      updated_at:
-        type: string
+      
