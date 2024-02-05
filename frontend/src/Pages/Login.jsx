@@ -12,7 +12,6 @@ const Login = () => {
       navigate("/profile");
     }
   }, [isConnected]);
-  console.log(isConnecting, isConnected);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const username = document.getElementById("username").value;
