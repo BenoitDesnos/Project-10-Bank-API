@@ -180,8 +180,8 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transactions Module
-      summary: Transactions API
+        - Details Module
+      summary: Details API
       description: Create details for a specific transaction
       parameters:
         - in: header
@@ -215,9 +215,9 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transactions Module
-      summary: Transactions API
-      description: Update details for a specific transaction
+        - Details Module
+      summary: Details API
+      description: Update a specific detail for a specific transaction
       parameters:
         - in: header
           type: string
@@ -234,7 +234,7 @@ paths:
         - application/json
       responses:
         '200':
-          description: Transaction details retrieved successully
+          description: Transaction details updated successully
           schema:
             $ref: '#/definitions/Details'
         '400':
@@ -245,9 +245,9 @@ paths:
       security:
         - Bearer: []
       tags:
-        - Transactions Module
-      summary: Transactions API
-      description: Delete transaction details
+        - Details Module
+      summary: Details API
+      description: Delete a specific detail for a specific transaction
       parameters:
         - in: header
           type: string
@@ -259,7 +259,7 @@ paths:
         - application/json
       responses:
         '204':
-          description: Transaction details deleted successfully
+          description: Transaction detail deleted successfully
         '400':
           description: Invalid Fields
         '500':
