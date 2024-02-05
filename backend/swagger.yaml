@@ -67,6 +67,7 @@ paths:
       description: API for fetching a user profile
       parameters:
         - in: header
+          type: string
           name: Authorization
           description: Attach Bearer JWT token
           required: true
@@ -90,6 +91,7 @@ paths:
       description: API for updating a user profile
       parameters:
         - in: header
+          type: string
           name: Authorization
           description: Attach Bearer JWT token
           required: true
@@ -106,6 +108,106 @@ paths:
           description: User profile retrieved successully
           schema:
             $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /:accountId/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      description: Get transactions by account for a specific month and year (last month by default)
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: query
+          name: year
+          description: The year for which transactions are to be retrieved (e.g., 2024)
+          required: false
+          type: integer
+        - in: query
+          name: month
+          description: The month for which transactions are to be retrieved (1-12)
+          required: false
+          type: integer
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          schema:
+            type: array
+            items: 
+              $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+
+  /:accountId/transactions/:id:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      description: Get transaction details
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction details retrieved successully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Transactions API
+      description: Update transaction details
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Update transaction attributes
+          required: true
+          schema:
+            type: object
+            properties: 
+              category:
+                type: string
+                description: The category of the transaction
+              note:
+                type: string
+                description: The note of the transaction  
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction details retrieved successully
+          schema:
+            $ref: '#/definitions/Transaction'
         '400':
           description: Invalid Fields
         '500':
@@ -163,4 +265,23 @@ definitions:
       firstName:
         type: string
       lastName:
+        type: string
+  Transaction:
+    type: object
+    properties:
+      id: 
+        type: string 
+      description:
+        type: string
+      amount:
+        type: number
+      balance:
+        type: number
+      category: 
+        type: string 
+      notes:
+        type: string 
+      created_at:
+        type: string
+      updated_at:
         type: string
